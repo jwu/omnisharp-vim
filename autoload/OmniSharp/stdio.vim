@@ -28,6 +28,12 @@ function! OmniSharp#stdio#HandleResponse(job, message) abort
     call OmniSharp#log#Log(a:job, 'JSON error: ' . v:exception)
     return
   endtry
+
+  " jwu bug-fix
+  if type(res) != type({})
+    let res = {}
+  endif
+
   call OmniSharp#log#LogServer(a:job, a:message, res)
   if get(res, 'Type', '') ==# 'event'
     call s:HandleServerEvent(a:job, res)
